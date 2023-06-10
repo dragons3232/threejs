@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <div id="threejs" />
 </template>
 
 <script>
@@ -19,7 +19,9 @@ export default {
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+
+    const container = document.getElementById("threejs");
+    container.appendChild(renderer.domElement);
 
     const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
@@ -43,12 +45,14 @@ export default {
 </script>
 
 <style>
+body {
+  margin: 0;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
