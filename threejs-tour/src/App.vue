@@ -56,16 +56,17 @@ export default {
   },
   methods: {
     glowStar(scene) {
+      const starMap = this.randomPoints(40, [18, 15, 12, 10]);
       const geometry = new THREE.BufferGeometry();
-      const position = new THREE.Float32BufferAttribute([1, 0, -8], 3);
+      const position = new THREE.Float32BufferAttribute(starMap, 3);
       geometry.setAttribute("position", position);
       const material = new THREE.PointsMaterial({ map: tglowStar });
       const points = new THREE.Points(geometry, material);
       scene.add(points);
     },
-    randomPoints(numOfStars) {
+    randomPoints(numOfStars, zIds) {
       const quarter = numOfStars / 4;
-      const zIndices = [120, 100, 90, 80, 60];
+      const zIndices = zIds || [120, 100, 90, 80, 60];
 
       const starMap = [];
       for (let i = 0; i <= numOfStars; i++) {
