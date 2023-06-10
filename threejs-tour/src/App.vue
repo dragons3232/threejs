@@ -33,14 +33,22 @@ export default {
     // scene.add(cylinder);
 
     camera.position.z = 5;
-    this.addStar(scene);
-    this.glowStar(scene);
+    const nstars = this.addStar(scene);
+    const gstars = this.glowStar(scene);
 
     function animate() {
       requestAnimationFrame(animate);
 
       cylinder.rotation.x += 0.01;
       cylinder.rotation.y += 0.01;
+
+      nstars.map((e) => {
+        e.visible = Math.floor(Math.random() * 100) >= 20;
+      });
+
+      gstars.map((e) => {
+        e.visible = Math.floor(Math.random() * 100) >= 5;
+      });
 
       renderer.render(scene, camera);
     }
@@ -56,13 +64,21 @@ export default {
   },
   methods: {
     glowStar(scene) {
+      const stars = [];
       const starMap = this.randomPoints(40, [18, 15, 12, 10]);
-      const geometry = new THREE.BufferGeometry();
-      const position = new THREE.Float32BufferAttribute(starMap, 3);
-      geometry.setAttribute("position", position);
-      const material = new THREE.PointsMaterial({ map: tglowStar });
-      const points = new THREE.Points(geometry, material);
-      scene.add(points);
+
+      for (let i = 0; i < starMap.length / 3; i++) {
+        const j = i * 3;
+        const p = [starMap[j], starMap[j + 1], starMap[j + 2]];
+        const geometry = new THREE.BufferGeometry();
+        const position = new THREE.Float32BufferAttribute(p, 3);
+        geometry.setAttribute("position", position);
+        const material = new THREE.PointsMaterial({ map: tglowStar });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+        stars.push(points);
+      }
+      return stars;
     },
     randomPoints(numOfStars, zIds) {
       const quarter = numOfStars / 4;
@@ -85,13 +101,21 @@ export default {
       return starMap;
     },
     addStar(scene) {
+      const stars = [];
       const starMap = this.randomPoints(160);
-      const geometry = new THREE.BufferGeometry();
-      const position = new THREE.Float32BufferAttribute(starMap, 3);
-      geometry.setAttribute("position", position);
-      const material = new THREE.PointsMaterial({ map: tstar });
-      const points = new THREE.Points(geometry, material);
-      scene.add(points);
+
+      for (let i = 0; i < starMap.length / 3; i++) {
+        const j = i * 3;
+        const p = [starMap[j], starMap[j + 1], starMap[j + 2]];
+        const geometry = new THREE.BufferGeometry();
+        const position = new THREE.Float32BufferAttribute(p, 3);
+        geometry.setAttribute("position", position);
+        const material = new THREE.PointsMaterial({ map: tstar });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+        stars.push(points);
+      }
+      return stars;
     },
   },
 };
