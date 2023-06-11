@@ -5,6 +5,10 @@
 <script>
 import * as THREE from "three";
 
+const texLoader = new THREE.TextureLoader();
+const tglowStar = texLoader.load("merkababloom.png");
+const tstar = texLoader.load("star.png");
+
 export default {
   name: "App",
   components: {},
@@ -26,9 +30,11 @@ export default {
     const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const cylinder = new THREE.Mesh(geometry, material);
-    scene.add(cylinder);
+    // scene.add(cylinder);
 
     camera.position.z = 5;
+    this.addStar(scene);
+    this.glowStar(scene);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -47,6 +53,24 @@ export default {
 
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
+  },
+  methods: {
+    glowStar(scene) {
+      const geometry = new THREE.BufferGeometry();
+      const position = new THREE.Float32BufferAttribute([1, 0, -8], 3);
+      geometry.setAttribute("position", position);
+      const material = new THREE.PointsMaterial({ map: tglowStar });
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+    },
+    addStar(scene) {
+      const geometry = new THREE.BufferGeometry();
+      const position = new THREE.Float32BufferAttribute([0, 0, -30], 3);
+      geometry.setAttribute("position", position);
+      const material = new THREE.PointsMaterial({ map: tstar });
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+    },
   },
 };
 </script>
