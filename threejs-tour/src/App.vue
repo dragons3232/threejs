@@ -13,6 +13,7 @@ const tsparkle3 = texLoader.load("sparkle3.png");
 // const tstar = texLoader.load("star.png");
 
 const sparkles = [tsparkle, tsparkle2, tsparkle3];
+const littles = [tsparkle, tsparkle2];
 
 export default {
   name: "App",
@@ -118,7 +119,9 @@ export default {
         const geometry = new THREE.BufferGeometry();
         const position = new THREE.Float32BufferAttribute(p, 3);
         geometry.setAttribute("position", position);
-        const material = new THREE.PointsMaterial({ map: tsparkle });
+        const material = new THREE.PointsMaterial({
+          map: littles[Math.floor(Math.random() * 10) % littles.length],
+        });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         stars.push(points);
