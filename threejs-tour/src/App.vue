@@ -6,8 +6,13 @@
 import * as THREE from "three";
 
 const texLoader = new THREE.TextureLoader();
-const tglowStar = texLoader.load("merkababloom.png");
+// const tglowStar = texLoader.load("merkababloom.png");
+const tsparkle = texLoader.load("sparkle.png");
+const tsparkle2 = texLoader.load("sparkle2.png");
+const tsparkle3 = texLoader.load("sparkle3.png");
 const tstar = texLoader.load("star.png");
+
+const sparkles = [tsparkle, tsparkle2, tsparkle3];
 
 export default {
   name: "App",
@@ -65,7 +70,7 @@ export default {
   methods: {
     glowStar(scene) {
       const stars = [];
-      const starMap = this.randomPoints(40, [18, 15, 12, 10]);
+      const starMap = this.randomPoints(320, [18, 15, 12, 10]);
 
       for (let i = 0; i < starMap.length / 3; i++) {
         const j = i * 3;
@@ -73,7 +78,10 @@ export default {
         const geometry = new THREE.BufferGeometry();
         const position = new THREE.Float32BufferAttribute(p, 3);
         geometry.setAttribute("position", position);
-        const material = new THREE.PointsMaterial({ map: tglowStar });
+        const material = new THREE.PointsMaterial({
+          map: sparkles[Math.floor(Math.random() * 10) % sparkles.length],
+          transparent: true,
+        });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         stars.push(points);
@@ -102,7 +110,7 @@ export default {
     },
     addStar(scene) {
       const stars = [];
-      const starMap = this.randomPoints(160);
+      const starMap = this.randomPoints(80);
 
       for (let i = 0; i < starMap.length / 3; i++) {
         const j = i * 3;
