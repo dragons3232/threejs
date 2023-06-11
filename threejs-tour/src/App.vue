@@ -63,9 +63,30 @@ export default {
       const points = new THREE.Points(geometry, material);
       scene.add(points);
     },
+    randomPoints(numOfStars) {
+      const quarter = numOfStars / 4;
+      const zIndices = [120, 100, 90, 80, 60];
+
+      const starMap = [];
+      for (let i = 0; i <= numOfStars; i++) {
+        const x = Math.floor(Math.random() * 100);
+        const y = Math.floor(Math.random() * 100) % 50;
+        const z = zIndices[Math.floor(Math.random() * 10) % zIndices.length];
+
+        const division = Math.floor(i / quarter);
+        const signX = division == 0 || division == 1;
+        const signY = division == 1 || division == 3;
+
+        starMap.push(signX ? -x : x);
+        starMap.push(signY ? -y : y);
+        starMap.push(-z);
+      }
+      return starMap;
+    },
     addStar(scene) {
+      const starMap = this.randomPoints(160);
       const geometry = new THREE.BufferGeometry();
-      const position = new THREE.Float32BufferAttribute([0, 0, -30], 3);
+      const position = new THREE.Float32BufferAttribute(starMap, 3);
       geometry.setAttribute("position", position);
       const material = new THREE.PointsMaterial({ map: tstar });
       const points = new THREE.Points(geometry, material);
