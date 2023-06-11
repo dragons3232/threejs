@@ -4,6 +4,7 @@
 
 <script>
 import * as THREE from "three";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 const texLoader = new THREE.TextureLoader();
 // const tglowStar = texLoader.load("merkababloom.png");
@@ -42,6 +43,8 @@ export default {
     const nstars = this.addStar(scene);
     const gstars = this.glowStar(scene);
 
+    this.model3d(scene);
+
     function animate() {
       requestAnimationFrame(animate);
 
@@ -69,6 +72,22 @@ export default {
     });
   },
   methods: {
+    model3d(scene) {
+      const objLoader = new OBJLoader();
+      const plume = texLoader.load("plume.png");
+      const material = new THREE.MeshBasicMaterial({
+        map: plume,
+      });
+
+      objLoader.load("plume.obj", (model) => {
+        model.traverse(function (child) {
+          if (child instanceof THREE.Mesh) {
+            child.material = material;
+          }
+        });
+        scene.add(model);
+      });
+    },
     glowStar(scene) {
       const stars = [];
       const starMap = this.randomPoints(320, [18, 15, 12, 10]);
