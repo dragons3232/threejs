@@ -11,7 +11,7 @@ const texLoader = new THREE.TextureLoader();
 const tsparkle = texLoader.load("sparkle.png");
 const tsparkle2 = texLoader.load("sparkle2.png");
 const tsparkle3 = texLoader.load("sparkle3.png");
-// const tstar = texLoader.load("star.png");
+const tstar = texLoader.load("star.png");
 
 const sparkles = [tsparkle, tsparkle2, tsparkle3];
 const littles = [tsparkle, tsparkle2];
@@ -42,6 +42,7 @@ export default {
     camera.position.z = 5;
     const nstars = this.addStar(scene);
     const gstars = this.glowStar(scene);
+    const shootingStars = this.shootingStar(scene);
 
     this.model3d(scene);
 
@@ -50,6 +51,15 @@ export default {
 
       cylinder.rotation.x += 0.01;
       cylinder.rotation.y += 0.01;
+
+      shootingStars.map((e) => {
+        const z = e.position.z + 0.5;
+        if (z > 30) {
+          e.position.z = -80;
+        } else {
+          e.position.z = z;
+        }
+      });
 
       nstars.map((e) => {
         e.visible = Math.floor(Math.random() * 100) >= 20;
@@ -140,6 +150,25 @@ export default {
         geometry.setAttribute("position", position);
         const material = new THREE.PointsMaterial({
           map: littles[Math.floor(Math.random() * 10) % littles.length],
+        });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+        stars.push(points);
+      }
+      return stars;
+    },
+    shootingStar(scene) {
+      const stars = [];
+      const starMap = this.randomPoints(40);
+
+      for (let i = 0; i < starMap.length / 3; i++) {
+        const j = i * 3;
+        const p = [starMap[j], starMap[j + 1], starMap[j + 2]];
+        const geometry = new THREE.BufferGeometry();
+        const position = new THREE.Float32BufferAttribute(p, 3);
+        geometry.setAttribute("position", position);
+        const material = new THREE.PointsMaterial({
+          map: tstar,
         });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
