@@ -10,7 +10,7 @@ const texLoader = new THREE.TextureLoader();
 const tsparkle = texLoader.load("sparkle.png");
 const tsparkle2 = texLoader.load("sparkle2.png");
 const tsparkle3 = texLoader.load("sparkle3.png");
-const tstar = texLoader.load("star.png");
+// const tstar = texLoader.load("star.png");
 
 const sparkles = [tsparkle, tsparkle2, tsparkle3];
 
@@ -90,7 +90,7 @@ export default {
     },
     randomPoints(numOfStars, zIds) {
       const quarter = numOfStars / 4;
-      const zIndices = zIds || [120, 100, 90, 80, 60];
+      const zIndices = zIds || [80, 70, 60, 50];
 
       const starMap = [];
       for (let i = 0; i <= numOfStars; i++) {
@@ -118,7 +118,7 @@ export default {
         const geometry = new THREE.BufferGeometry();
         const position = new THREE.Float32BufferAttribute(p, 3);
         geometry.setAttribute("position", position);
-        const material = new THREE.PointsMaterial({ map: tstar });
+        const material = new THREE.PointsMaterial({ map: tsparkle });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         stars.push(points);
