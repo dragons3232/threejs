@@ -69,6 +69,8 @@ export default {
       cylinder.rotation.x += 0.01;
       cylinder.rotation.y += 0.01;
 
+      globe.rotation.y += 0.002;
+
       shootingStars.map((e, index) => {
         const z = e.position.z + starSpeeds[index];
         if (z > smokeMaxZ) {
