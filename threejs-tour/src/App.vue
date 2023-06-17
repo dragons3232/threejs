@@ -11,7 +11,8 @@ const texLoader = new THREE.TextureLoader();
 const tsparkle = texLoader.load("sparkle.png");
 const tsparkle2 = texLoader.load("sparkle2.png");
 const tsparkle3 = texLoader.load("sparkle3.png");
-const tstar = texLoader.load("star.png");
+// const tstar = texLoader.load("star.png");
+const tsmoke = texLoader.load("smoke_particle.png");
 
 const sparkles = [tsparkle, tsparkle2, tsparkle3];
 const littles = [tsparkle, tsparkle2];
@@ -44,7 +45,7 @@ export default {
     const gstars = this.glowStar(scene);
     const shootingStars = this.shootingStar(scene);
 
-    this.model3d(scene);
+    // this.model3d(scene);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -168,7 +169,8 @@ export default {
         const position = new THREE.Float32BufferAttribute(p, 3);
         geometry.setAttribute("position", position);
         const material = new THREE.PointsMaterial({
-          map: tstar,
+          map: tsmoke,
+          transparent: true,
         });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
