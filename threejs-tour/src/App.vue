@@ -5,6 +5,7 @@
 <script>
 import * as THREE from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import ThreeGlobe from "three-globe";
 
 const texLoader = new THREE.TextureLoader();
 // const tglowStar = texLoader.load("merkababloom.png");
@@ -49,6 +50,18 @@ export default {
     const shootingStars = this.shootingStar(scene);
 
     // this.model3d(scene);
+
+    const globe = new ThreeGlobe()
+      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png");
+
+    globe.position.z = -250;
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.position.set(0, 0, 1); // change light position to see the specularMap's effect
+
+    scene.add(globe);
+    scene.add(directionalLight);
 
     function animate() {
       requestAnimationFrame(animate);
