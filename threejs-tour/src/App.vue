@@ -16,6 +16,9 @@ const tsmoke = texLoader.load("smoke_particle.png");
 
 const sparkles = [tsparkle, tsparkle2, tsparkle3];
 const littles = [tsparkle, tsparkle2];
+const smokeMaxZ = 200;
+const shootingSpeeds = [0.5, 0.7, 0.8, 1];
+const starSpeeds = [];
 
 export default {
   name: "App",
@@ -53,10 +56,10 @@ export default {
       cylinder.rotation.x += 0.01;
       cylinder.rotation.y += 0.01;
 
-      shootingStars.map((e) => {
-        const z = e.position.z + 0.5;
-        if (z > 30) {
-          e.position.z = -80;
+      shootingStars.map((e, index) => {
+        const z = e.position.z + starSpeeds[index];
+        if (z > smokeMaxZ) {
+          e.position.z = -smokeMaxZ;
         } else {
           e.position.z = z;
         }
@@ -160,7 +163,12 @@ export default {
     },
     shootingStar(scene) {
       const stars = [];
-      const starMap = this.randomPoints(40);
+      const starMap = this.randomPoints(40, [
+        smokeMaxZ,
+        smokeMaxZ - 60,
+        smokeMaxZ - 120,
+        smokeMaxZ - 150,
+      ]);
 
       for (let i = 0; i < starMap.length / 3; i++) {
         const j = i * 3;
@@ -175,6 +183,9 @@ export default {
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         stars.push(points);
+
+        const sIndex = Math.floor(Math.random() * 10) % shootingSpeeds.length;
+        starSpeeds.push(shootingSpeeds[sIndex]);
       }
       return stars;
     },
