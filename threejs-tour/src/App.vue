@@ -52,6 +52,7 @@ export default {
     const gstars = this.glowStar(scene);
     const shootingStars = this.shootingStar(scene);
 
+    this.addCube();
     this.addCylinder();
     this.addText();
     // this.model3d(scene);
@@ -104,6 +105,16 @@ export default {
     });
   },
   methods: {
+    addCube() {
+      const { scene } = this.threejs;
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+
+      cube.rotation.set(-1, 0, 0);
+      cube.position.set(-3, 0, 0);
+    },
     addCylinder() {
       const { scene } = this.threejs;
 
