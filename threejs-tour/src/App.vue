@@ -5,6 +5,8 @@
 <script>
 import * as THREE from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import ThreeGlobe from "three-globe";
 
 const texLoader = new THREE.TextureLoader();
@@ -43,12 +45,18 @@ export default {
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const cylinder = new THREE.Mesh(geometry, material);
     // scene.add(cylinder);
+    this.threejs = {
+      renderer,
+      scene,
+      camera,
+    };
 
     camera.position.z = 5;
     const nstars = this.addStar(scene);
     const gstars = this.glowStar(scene);
     const shootingStars = this.shootingStar(scene);
 
+    this.addText();
     // this.model3d(scene);
 
     const globe = new ThreeGlobe()
@@ -102,6 +110,34 @@ export default {
     });
   },
   methods: {
+    addText() {
+      const { scene } = this.threejs;
+      const loader = new FontLoader();
+
+      loader.load("fonts/helvetiker_regular.typeface.json", function (font) {
+        const geometry = new TextGeometry("ThreeJs Galaxy", {
+          font,
+          size: 150,
+          height: 30,
+          curveSegments: 12,
+          bevelEnabled: true,
+          bevelThickness: 10,
+          bevelSize: 8,
+          bevelOffset: 0,
+          bevelSegments: 5,
+        });
+
+        const material = new THREE.MeshPhongMaterial({ color: 0x6ed47c });
+        const text = new THREE.Mesh(geometry, material);
+        scene.add(text);
+
+        text.scale.set(0.003, 0.003, 0.003);
+        text.position.x = -2;
+        text.position.y = 2;
+        text.rotateY(0.1);
+        text.rotateZ(0.15);
+      });
+    },
     model3d(scene) {
       const objLoader = new OBJLoader();
       const plume = texLoader.load("plume.png");
