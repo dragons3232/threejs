@@ -61,13 +61,13 @@ export default {
       .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
       .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png");
 
-    // globe.position.z = -250;
+    globe.position.z = -3;
     globe.scale.set(0.02, 0.02, 0.02);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
     directionalLight.position.set(0, 0, 1); // change light position to see the specularMap's effect
 
-    scene.add(globe);
+    // scene.add(globe);
     scene.add(directionalLight);
 
     function animate() {
