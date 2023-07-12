@@ -41,10 +41,6 @@ export default {
     const container = document.getElementById("threejs");
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    const cylinder = new THREE.Mesh(geometry, material);
-    // scene.add(cylinder);
     this.threejs = {
       renderer,
       scene,
@@ -56,6 +52,7 @@ export default {
     const gstars = this.glowStar(scene);
     const shootingStars = this.shootingStar(scene);
 
+    this.addCylinder();
     this.addText();
     // this.model3d(scene);
 
@@ -74,9 +71,6 @@ export default {
 
     function animate() {
       requestAnimationFrame(animate);
-
-      cylinder.rotation.x += 0.01;
-      cylinder.rotation.y += 0.01;
 
       globe.rotation.y += 0.002;
 
@@ -110,6 +104,18 @@ export default {
     });
   },
   methods: {
+    addCylinder() {
+      const { scene } = this.threejs;
+
+      const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+      const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      const cylinder = new THREE.Mesh(geometry, material);
+      scene.add(cylinder);
+
+      cylinder.position.set(3, 0, 0);
+
+      return cylinder;
+    },
     addText() {
       const { scene } = this.threejs;
       const loader = new FontLoader();
