@@ -5,6 +5,8 @@
 <script>
 import * as THREE from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import ThreeGlobe from "three-globe";
@@ -155,19 +157,80 @@ export default {
         text.rotateZ(0.15);
       });
     },
-    model3d(scene) {
+    model3dMtl(obj, materialImage, scale, rotation) {
+      const { scene } = this.threejs;
       const objLoader = new OBJLoader();
-      const plume = texLoader.load("plume.png");
-      const material = new THREE.MeshBasicMaterial({
+      const mtlLoader = new MTLLoader();
+
+      mtlLoader.load(
+        materialImage,
+        (materials) => {
+          materials.preload();
+          objLoader.setMaterials(materials);
+          objLoader.load(
+            obj,
+            (object) => {
+              object.scale.set(scale, scale, scale);
+              if (rotation) object.rotation.set(rotation[0], rotation[1], rotation[2]);
+              object.position.x = -1;
+              scene.add(object);
+            },
+            (xhr) => {
+              console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            },
+            (error) => console.log(error)
+          );
+        },
+        (xhr) => {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        (error) => console.log(error)
+      );
+    },
+    model3dGlbGltf(obj, scale, rotation) {
+      const { scene } = this.threejs;
+      const gltfLoader = new GLTFLoader();
+      gltfLoader.load(
+        obj,
+        (gltf) => {
+          const object = gltf.scene;
+          object.scale.set(scale, scale, scale);
+          if (rotation) object.rotation.set(rotation[0], rotation[1], rotation[2]);
+          object.position.x = -1;
+          scene.add(object);
+        },
+        (xhr) => {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        (error) => console.log(error)
+      );
+    },
+    model3d(obj, materialImage, scale, rotation) {
+      const { scene } = this.threejs;
+      const objLoader = new OBJLoader();
+
+      if (obj.split(".").reverse()[0] == "gltf" || obj.split(".").reverse()[0] == "glb") {
+        return this.model3dGlbGltf(obj, scale, rotation);
+      }
+
+      if (materialImage.split(".").reverse()[0] == "mtl") {
+        return this.model3dMtl(obj, materialImage, scale, rotation);
+      }
+
+      const plume = texLoader.load(materialImage);
+      const material = new THREE.MeshPhongMaterial({
         map: plume,
       });
 
-      objLoader.load("plume.obj", (model) => {
+      objLoader.load(obj, (model) => {
         model.traverse(function (child) {
           if (child instanceof THREE.Mesh) {
             child.material = material;
           }
         });
+        model.scale.set(scale, scale, scale);
+        if (rotation) model.rotation.set(rotation[0], rotation[1], rotation[2]);
+        model.position.x = -1;
         scene.add(model);
       });
     },
