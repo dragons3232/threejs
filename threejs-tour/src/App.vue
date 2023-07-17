@@ -153,7 +153,7 @@ export default {
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    renderer.domElement.addEventListener("click", this.raycastClick, false);
+    renderer.domElement.addEventListener("mousemove", this.raycastClick, false);
   },
   methods: {
     raycastClick() {
