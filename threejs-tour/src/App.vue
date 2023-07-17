@@ -28,6 +28,9 @@ const starSpeeds = [];
 export default {
   name: "App",
   components: {},
+  data: () => ({
+    intersected: "",
+  }),
   mounted() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -170,6 +173,10 @@ export default {
       if (intersects.length > 0) {
         var object = intersects[0].object;
 
+        if (object.uuid == this.intersected) {
+          return;
+        }
+        this.intersected = object.uuid;
         object.material.color.set(Math.random() * 0xffffff);
       }
     },
