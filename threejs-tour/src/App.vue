@@ -39,6 +39,8 @@ export default {
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    const raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2();
 
     const container = document.getElementById("threejs");
     container.appendChild(renderer.domElement);
@@ -47,6 +49,8 @@ export default {
       renderer,
       scene,
       camera,
+      raycaster,
+      mouse,
     };
 
     camera.position.z = 5;
@@ -67,16 +71,16 @@ export default {
     //   rotation: [0.5, 0, 0],
     // });
     // this.model3d("hydration_bottle/scene.gltf", "", {scale: 0.001});
-    this.model3d("Strawberry.gltf", "", { scale: 0.12, position: [-3, 0, 0] });
-    this.model3d(
-      "WreathCookie/Wreath_Cookie_OBJ.obj",
-      "WreathCookie/Wreath_Cookie_Texture4K/Wreath_Cookie_BaseColor.jpg",
-      {
-        scale: 10,
-        position: [-3, -2, 0],
-        rotation: [1.2, 0, 0],
-      }
-    );
+    // this.model3d("Strawberry.gltf", "", { scale: 0.12, position: [-3, 0, 0] });
+    // this.model3d(
+    //   "WreathCookie/Wreath_Cookie_OBJ.obj",
+    //   "WreathCookie/Wreath_Cookie_Texture4K/Wreath_Cookie_BaseColor.jpg",
+    //   {
+    //     scale: 10,
+    //     position: [-3, -2, 0],
+    //     rotation: [1.2, 0, 0],
+    //   }
+    // );
     this.model3d("house.gltf/house.glb", "", {
       scale: 0.2,
       rotation: [0, 0.4, 0],
@@ -87,20 +91,20 @@ export default {
       position: [0, -2, 0],
       rotation: [0, -1.2, 0],
     });
-    this.model3d("BreadObj/Bread.obj", "BreadObj/Bread.mtl", {
-      scale: 10,
-      position: [3, 0, 0],
-      rotation: [1, 0, 0],
-    });
-    this.model3d(
-      "PoundCake/Pound_Cake_OBJ.obj",
-      "PoundCake/Pound_Cake_Texture4k/PoundCake__Base_Color.png",
-      {
-        scale: 0.05,
-        position: [3, -2, 0],
-        rotation: [1.5, 0.2, -0.2],
-      }
-    );
+    // this.model3d("BreadObj/Bread.obj", "BreadObj/Bread.mtl", {
+    //   scale: 10,
+    //   position: [3, 0, 0],
+    //   rotation: [1, 0, 0],
+    // });
+    // this.model3d(
+    //   "PoundCake/Pound_Cake_OBJ.obj",
+    //   "PoundCake/Pound_Cake_Texture4k/PoundCake__Base_Color.png",
+    //   {
+    //     scale: 0.05,
+    //     position: [3, -2, 0],
+    //     rotation: [1.5, 0.2, -0.2],
+    //   }
+    // );
 
     const globe = new ThreeGlobe()
       .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
@@ -148,8 +152,27 @@ export default {
 
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
+
+    renderer.domElement.addEventListener("click", this.raycastClick, false);
   },
   methods: {
+    raycastClick() {
+      event.preventDefault();
+
+      const { scene, camera, raycaster, mouse } = this.threejs;
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      var intersects = raycaster.intersectObject(scene, true);
+
+      if (intersects.length > 0) {
+        var object = intersects[0].object;
+
+        object.material.color.set(Math.random() * 0xffffff);
+      }
+    },
     addCube() {
       const { scene } = this.threejs;
       const geometry = new THREE.BoxGeometry(1, 1, 1);
