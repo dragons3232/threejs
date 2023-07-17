@@ -157,7 +157,7 @@ export default {
         text.rotateZ(0.15);
       });
     },
-    model3dMtl(obj, materialImage, scale, rotation) {
+    model3dMtl(obj, materialImage, { position, scale, rotation }) {
       const { scene } = this.threejs;
       const objLoader = new OBJLoader();
       const mtlLoader = new MTLLoader();
@@ -171,8 +171,8 @@ export default {
             obj,
             (object) => {
               object.scale.set(scale, scale, scale);
+              if (position) object.position.set(position[0], position[1], position[2]);
               if (rotation) object.rotation.set(rotation[0], rotation[1], rotation[2]);
-              object.position.x = -1;
               scene.add(object);
             },
             (xhr) => {
@@ -187,7 +187,7 @@ export default {
         (error) => console.log(error)
       );
     },
-    model3dGlbGltf(obj, scale, rotation) {
+    model3dGlbGltf(obj, { position, scale, rotation }) {
       const { scene } = this.threejs;
       const gltfLoader = new GLTFLoader();
       gltfLoader.load(
@@ -195,8 +195,8 @@ export default {
         (gltf) => {
           const object = gltf.scene;
           object.scale.set(scale, scale, scale);
+          if (position) object.position.set(position[0], position[1], position[2]);
           if (rotation) object.rotation.set(rotation[0], rotation[1], rotation[2]);
-          object.position.x = -1;
           scene.add(object);
         },
         (xhr) => {
@@ -205,16 +205,16 @@ export default {
         (error) => console.log(error)
       );
     },
-    model3d(obj, materialImage, scale, rotation) {
+    model3d(obj, materialImage, { position, scale, rotation }) {
       const { scene } = this.threejs;
       const objLoader = new OBJLoader();
 
       if (obj.split(".").reverse()[0] == "gltf" || obj.split(".").reverse()[0] == "glb") {
-        return this.model3dGlbGltf(obj, scale, rotation);
+        return this.model3dGlbGltf(obj, { position, scale, rotation });
       }
 
       if (materialImage.split(".").reverse()[0] == "mtl") {
-        return this.model3dMtl(obj, materialImage, scale, rotation);
+        return this.model3dMtl(obj, materialImage, { position, scale, rotation });
       }
 
       const plume = texLoader.load(materialImage);
@@ -229,8 +229,8 @@ export default {
           }
         });
         model.scale.set(scale, scale, scale);
+        if (position) model.position.set(position[0], position[1], position[2]);
         if (rotation) model.rotation.set(rotation[0], rotation[1], rotation[2]);
-        model.position.x = -1;
         scene.add(model);
       });
     },
