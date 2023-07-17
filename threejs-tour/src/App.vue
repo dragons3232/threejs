@@ -54,10 +54,53 @@ export default {
     const gstars = this.glowStar(scene);
     const shootingStars = this.shootingStar(scene);
 
-    this.addCube();
-    this.addCylinder();
+    // this.addCube();
+    // this.addCylinder();
     this.addText();
-    // this.model3d(scene);
+    // this.model3d("BananaObj/Banana.obj", "BananaObj/Banana_BaseColor.png", {
+    //   scale: 0.01,
+    //   position: [-3, -2, 0],
+    // });
+    // this.model3d("DoughnutObj/Doughnut_OBJ.obj", "DoughnutObj/Doughnut_OBJ.mtl", {
+    //   scale: 8,
+    //   position: [3, -2, 0],
+    //   rotation: [0.5, 0, 0],
+    // });
+    // this.model3d("hydration_bottle/scene.gltf", "", {scale: 0.001});
+    this.model3d("Strawberry.gltf", "", { scale: 0.12, position: [-3, 0, 0] });
+    this.model3d(
+      "WreathCookie/Wreath_Cookie_OBJ.obj",
+      "WreathCookie/Wreath_Cookie_Texture4K/Wreath_Cookie_BaseColor.jpg",
+      {
+        scale: 10,
+        position: [-3, -2, 0],
+        rotation: [1.2, 0, 0],
+      }
+    );
+    this.model3d("house.gltf/house.glb", "", {
+      scale: 0.2,
+      rotation: [0, 0.4, 0],
+      position: [0, 0, 0],
+    });
+    this.model3d("botcher_shop.gltf/botcher shop.glb", "", {
+      scale: 0.3,
+      position: [0, -2, 0],
+      rotation: [0, -1.2, 0],
+    });
+    this.model3d("BreadObj/Bread.obj", "BreadObj/Bread.mtl", {
+      scale: 10,
+      position: [3, 0, 0],
+      rotation: [1, 0, 0],
+    });
+    this.model3d(
+      "PoundCake/Pound_Cake_OBJ.obj",
+      "PoundCake/Pound_Cake_Texture4k/PoundCake__Base_Color.png",
+      {
+        scale: 0.05,
+        position: [3, -2, 0],
+        rotation: [1.5, 0.2, -0.2],
+      }
+    );
 
     const globe = new ThreeGlobe()
       .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
