@@ -31,6 +31,7 @@ export default {
   data: () => ({
     animId: 0,
     intersected: undefined,
+    prevMovTime: 0,
   }),
   mounted() {
     const scene = new THREE.Scene();
@@ -178,6 +179,10 @@ export default {
       }
     },
     raycastClick() {
+      const now = new Date().getTime();
+      if (now - this.prevMovTime < 200) return;
+      this.prevMovTime = now;
+
       event.preventDefault();
 
       const { scene, camera, raycaster, mouse } = this.threejs;
