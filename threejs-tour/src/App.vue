@@ -32,6 +32,7 @@ export default {
     animId: 0,
     intersected: undefined,
     prevMovTime: 0,
+    raycasting: false,
   }),
   mounted() {
     const scene = new THREE.Scene();
@@ -183,6 +184,9 @@ export default {
       if (now - this.prevMovTime < 200) return;
       this.prevMovTime = now;
 
+      if (this.raycasting) return;
+      this.raycasting = true;
+
       event.preventDefault();
 
       const { scene, camera, raycaster, mouse } = this.threejs;
@@ -201,6 +205,7 @@ export default {
         }
 
         if (object.uuid == this.intersected?.uuid) {
+          this.raycasting = false;
           return;
         } else {
           this.resetIntersectedAnim();
@@ -218,6 +223,7 @@ export default {
       } else {
         this.resetIntersectedAnim();
       }
+      this.raycasting = false;
     },
     addCube() {
       const { scene } = this.threejs;
