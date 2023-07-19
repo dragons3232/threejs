@@ -217,7 +217,7 @@ export default {
           object.scale.set(x * 2, y * 2, z * 2);
 
           this.spinAnim();
-        } else {
+        } else if (object.material) {
           object.material.color.set(Math.random() * 0xffffff);
         }
       } else {
