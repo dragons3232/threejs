@@ -29,7 +29,8 @@ export default {
   name: "App",
   components: {},
   data: () => ({
-    intersected: "",
+    animId: 0,
+    intersected: undefined,
   }),
   mounted() {
     const scene = new THREE.Scene();
@@ -159,6 +160,23 @@ export default {
     renderer.domElement.addEventListener("mousemove", this.raycastClick, false);
   },
   methods: {
+    spinAnim() {
+      this.animId = requestAnimationFrame(this.spinAnim);
+      this.intersected.rotation.y += 0.005;
+    },
+    resetIntersectedAnim() {
+      if (this.intersected) {
+        if (this.intersected.type == "Group") {
+          const { x, y, z } = this.intersected.scale;
+          this.intersected.scale.set(x * 0.5, y * 0.5, z * 0.5);
+          this.intersected.rotation.set(0, 0, 0);
+        }
+        this.intersected = undefined;
+        if (this.animId) {
+          cancelAnimationFrame(this.animId);
+        }
+      }
+    },
     raycastClick() {
       event.preventDefault();
 
@@ -173,11 +191,27 @@ export default {
       if (intersects.length > 0) {
         var object = intersects[0].object;
 
-        if (object.uuid == this.intersected) {
-          return;
+        if (object.parent) {
+          object = object.parent;
         }
-        this.intersected = object.uuid;
-        object.material.color.set(Math.random() * 0xffffff);
+
+        if (object.uuid == this.intersected?.uuid) {
+          return;
+        } else {
+          this.resetIntersectedAnim();
+        }
+        this.intersected = object;
+
+        if (object.type == "Group") {
+          const { x, y, z } = object.scale;
+          object.scale.set(x * 2, y * 2, z * 2);
+
+          this.spinAnim();
+        } else {
+          object.material.color.set(Math.random() * 0xffffff);
+        }
+      } else {
+        this.resetIntersectedAnim();
       }
     },
     addCube() {
