@@ -78,6 +78,9 @@
       const scene = new THREE.Scene();
       scene.add(axes);
 
+      const ambientLight = new THREE.AmbientLight(0xe0e0e0);
+      scene.add(ambientLight)
+
       // カメラを初期化
       const camera = new THREE.PerspectiveCamera(
         50,
