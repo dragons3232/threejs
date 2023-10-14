@@ -11,6 +11,15 @@
     src="https://unpkg.com/three@0.139.2/examples/js/loaders/MTLLoader.js"></script>
   <script>
 
+    const scaleToFit = (model) => {
+      const box3 = new THREE.Box3().setFromObject(model);
+      const size = new THREE.Vector3();
+      box3.getSize(size);
+
+      const scale = 0.5 / (box3.max.z - box3.min.z);
+      model.scale.set(scale, scale, scale);
+    }
+
     const model3dMtl = (scene, obj, materialImage, { position, scale, rotation }) => {
       const objLoader = new THREE.OBJLoader();
       const mtlLoader = new THREE.MTLLoader();
@@ -23,13 +32,7 @@
           objLoader.load(
             obj,
             (object) => {
-              const box3 = new THREE.Box3().setFromObject(object);
-              const size = new THREE.Vector3();
-              box3.getSize(size);
-
-              const scale = 1 / (box3.max.z - box3.min.z);
-
-              object.scale.set(scale, scale, scale);
+              scaleToFit(object);
               if (position) object.position.set(position[0], position[1], position[2]);
               if (rotation) object.rotation.set(rotation[0], rotation[1], rotation[2]);
               scene.add(object);
@@ -66,13 +69,7 @@
             child.material = material;
           }
         });
-        const box3 = new THREE.Box3().setFromObject(model);
-        const size = new THREE.Vector3();
-        box3.getSize(size);
-
-        const scale = 0.5 / (box3.max.z - box3.min.z);
-
-        model.scale.set(scale, scale, scale);
+        scaleToFit(model);
         if (position) model.position.set(position[0], position[1], position[2]);
         if (rotation) model.rotation.set(rotation[0], rotation[1], rotation[2]);
         scene.add(model);
