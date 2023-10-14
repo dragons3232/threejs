@@ -66,6 +66,12 @@
             child.material = material;
           }
         });
+        const box3 = new THREE.Box3().setFromObject(model);
+        const size = new THREE.Vector3();
+        box3.getSize(size);
+
+        const scale = 0.5 / (box3.max.z - box3.min.z);
+
         model.scale.set(scale, scale, scale);
         if (position) model.position.set(position[0], position[1], position[2]);
         if (rotation) model.rotation.set(rotation[0], rotation[1], rotation[2]);
