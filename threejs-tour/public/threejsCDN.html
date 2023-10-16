@@ -58,7 +58,7 @@
         return model3dMtl(scene, obj, materialImage, { position, scale, rotation });
       }
 
-      const texture = texLoader.load(materialImage);
+      const texture = !!materialImage ? texLoader.load(materialImage) : null;
       const material = new THREE.MeshPhongMaterial({
         map: texture,
       });
