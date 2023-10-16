@@ -54,7 +54,7 @@
       const objLoader = new THREE.OBJLoader();
       const texLoader = new THREE.TextureLoader();
 
-      if (materialImage.split(".").reverse()[0] == "mtl") {
+      if (materialImage && materialImage.split(".").reverse()[0] == "mtl") {
         return model3dMtl(scene, obj, materialImage, { position, scale, rotation });
       }
 
